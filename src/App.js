@@ -6,11 +6,14 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      city: '',
-      temp: '',
-      precipitation: '',
-      humidity: ''
+      error: null,
+      isLoaded: false,
+      weather: []
     }
+  }
+
+  componentDidMount() {
+    fetch("")
   }
 }
 
