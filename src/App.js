@@ -7,21 +7,28 @@ class App extends Component {
     super(props);
     this.state = {
       error: null,
-      isLoaded: false,
       weather: [],
       city: '',
       temp: ''
     }
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }  
 
-  componentDidMount() {
-    const api = process.env.WEATHER_API_KEY;
-    fetch(`http://api.openweathermap.org/data/2.5/weather?q=London&appid=${api}&units=metric`)
+  handleChange(event) {
+    this.setState({city: event.target.value});
+    event.preventDefault();
+  }
+
+  handleClick() {
+    const api = process.env.REACT_APP_WEATHER_API_KEY;
+    const city = this.state.city;
+    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api}&units=metric`)
       .then(res => res.json())
       .then(
         (result) => {
           this.setState({
-            isLoaded: true,
             weather: result.weather,
             city: result.name,
             temp: result.main.temp
@@ -29,7 +36,6 @@ class App extends Component {
         },
         (error) => {
           this.setState({
-            isLoaded: true,
             error
           });
         }
@@ -37,7 +43,7 @@ class App extends Component {
   }
 
   render() {
-    const {error, isLoaded, weather} = this.state;
+    const {error, weather} = this.state;
 
     if (error){
       return(
@@ -45,22 +51,19 @@ class App extends Component {
           Error : {error.message}
         </div>
       );
-    }else if (!isLoaded){
-      return (
-        <div>
-          Loading...
-        </div>
-      );
     }else{
       return(
-        <div>
+        <div id="wrapper">
+          <label>Select a city : </label>
+          <input type="text" onChange={this.handleChange}/>
+          <button type="submit" onClick={this.handleClick}>Submit</button>
           <h1>{this.state.city}</h1>
           {weather.map(weather => (
             <div>              
               <h2>{weather.description}</h2>
             </div>
           ))}
-          <h2>{this.state.temp}</h2>
+          <h2>{this.state.temp} Celsius</h2>
         </div>
       )
     }

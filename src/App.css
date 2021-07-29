@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+/* Style the wrapper */
+#wrapper{
+  text-align: center;
+  margin-top: 2em;
+}
